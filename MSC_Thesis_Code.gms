@@ -1,4 +1,4 @@
-                 Appendix - GAMS Code
+                 
 SETS
  h herd composition /1*3/
  heifers(h) /1/
@@ -24,6 +24,7 @@ SETS
  conc(fd) /7,8,9,10,11,15,16,17,18,20/
  seq(land) index for all land uses that sequester carbon /4*6/
  fat(fd) index for fats fed to cattle /19/
+ 
 $ontext
 List of feeds/crops making up 'c' index (note elements 5 and 6 are empty)
  1 = corn silage
@@ -42,13 +43,13 @@ List of feeds/crops making up 'c' index (note elements 5 and 6 are empty)
  14 = grass 2
  15 = corn grain
  16 = corn gluten meal
-86
  17 = wheat
  18 = gluten feed
  19 = vegetable oil
  20 = canola meal
 $offtext
 ;
+
 PARAMETERS
 * Per hectare crop costs are based on OMAF 2014
  Cc(crp) per hectare cost of crops
@@ -85,7 +86,6 @@ PARAMETERS
  maxrotn(crp)
  / 1 .75
  2 .5
-87
  3 .5
  4 .75
  /
@@ -129,7 +129,6 @@ PARAMETERS
  /
 * Feed prices, based on AAFC (2014)
  Pb(offs) market prices for off farm feed purchases ($ per metric ton of dry matter)
-88
  /
  7 282
  8 322
@@ -173,7 +172,6 @@ Qa(h) Number of animals in cohort
  /1 50
  2 50
  3 50
-89
  /
 * Protein retained for gain, based on IPCC (2006)
 PRgain(h)
@@ -219,7 +217,6 @@ TABLE NutProp(fd,n)
  14 0.557 0.128 0.00 0.403 0.607 0.006 0.0029 0
  15 0.850 0.094 2.09 0.034 0.095 0.004 0.003 0
  16 0.844 0.65 2.38 0.082 0.111 0.001 0.006 0.20
-90
  17 0.866 0.142 1.86 0.044 0.134 0.001 0.0043 0.50
  18 0.741 0.238 1.73 0.121 0.355 0.001 0.01 0.15
  19 1.841 0.000 5.65 0.000 0.000 0.004 0.004 0.03
@@ -244,6 +241,7 @@ $ontext
  19 = vegetable oil
  20 = canola meal
 $offtext
+
 SCALARS
 * IPCC (2006) value for methane producing capacity
  Bo /.24/
@@ -262,7 +260,7 @@ SCALARS
  ManPcont manure P content /.001/
  ManKcont manure K content /.0027/
 ;
-91
+
 POSITIVE VARIABLES
 Qf(h,c) amount of crop c being fed to the animal
 *Ration Variables
@@ -274,11 +272,11 @@ Qf(h,c) amount of crop c being fed to the animal
  roughage(h) roughage intake
  concentrate(h) concentrate intake
  TDN(h) total digestible nutrients of ration
- REM(h) ratio of net energy available in diet for maintenance to digestible energy
-consumed
+ REM(h) ratio of net energy available in diet for maintenance to digestible energy consumed
  SumCrop total crop land on farm
  MCF methane conversion factor
  REG(h) ratio of net energy available in diet for gain to digestible energy consumed
+ 
 Variable
  DietTDN(h) total digestible nutrients of ration
  ForageDMI(h) total forage intake of the animal
@@ -306,7 +304,7 @@ Positive Variables
  man2 manure produced by first parity cows
  man3 manure produced by second parity cows
  man total amount of manure produced
-92
+ 
 * Land and Nutrient Variables
  A(land) Hectares of land devoted to all possible types of land
  Ac(land) Hectares of land devoted to each crop
@@ -349,7 +347,7 @@ Effw energy emissions from farm field work
 Efah energy emissions from fertilizer and herbicide manufacturing
 Variable TotalGHGs total GHG emissions
 ;
-93
+
 * Declarations of variable bounds (required to avoid divide by zero, and other errors)
 DietTDN.l(h) = .001 ;
 Qc.l(fdmk) = 100;
@@ -392,7 +390,6 @@ EQUATIONS
  Krequirements(crp) define K requirements for crops
  Napplication(crp) define amount of N applied
  Papplication(crp) define amount of P applied from all sources
-94
  Kapplication(crp) define amount of K applied from all sources
  TotalNFertilizer define total N fertilizer used on farm
  TotalPFertilizer define total P fertilizer used on farm
@@ -439,11 +436,11 @@ EQUATIONS
  MilkingEmissions Energy related emissions from milking
  FarmFieldWorkEmissions Energy related emissions from farm field work
  FertilizerandHerbicideEmissions Energy related emissions from manufacturing of inputs
-95
  EnergyEmissions Sum of energy emissions
  OffFarmEmissions Upstream emissions from feed production
  EmissionConstraint GHG restriction
 ;
+
 * OBJECTIVE FUNCTION
 Objective .. Profit =E= Rev - Costs ;
 Revenue .. Rev =E= Qm*Pm +
@@ -476,7 +473,6 @@ ManureProduction3(secondparity) .. man3 =E=
 Qa(secondparity)*(DMI(secondparity)*2.63 + 9.4) ;
 TotalManure .. man =E= (man1 + man2 + man3) ;
 * Manure not applied on land is exported
-96
 ManureFate .. ManUsed =E= Sum((crp),mapp(crp)) ;
 ManureExport .. man - ManUsed =E= 0 ;
 * Define fate of crops grown on farm (i.e. to feed or to market)
@@ -515,7 +511,6 @@ ConcentrateIntake(h) .. concentrate(h) =E= Sum((conc),Qf(h,conc));
 *** DEFINE NUTRIENT REQUIREMENTS FOR ANIMALS
 EnergyRequirement_Lactating(lact) .. (NEm(lact)+ NEg(lact)+ NEl(lact))*.2388459
 =E= DMI(lact)*(.0245*DietTDN(lact)-.12);
-97
 EnergyRequirement_Heifers(heifers) .. 22.5 =E=
 (.04409*DietTDN(heifers)*1.01 -.45)*DMI(heifers);
 ProteinRequirement2(h) .. .2*DMI(h) =G= CP(h);
@@ -555,7 +550,6 @@ NExcretion(h) .. Nexcr(h) =E= (PI(h)/6.25) - (PRlactation(h)/6.38) -
 ManureN2O .. MN2O/298 =E= 365*Sum((h),Qa(h)*Nexcr(h)*(.005
 + .4*.01)) ;
 * Soil Nitrous Oxide (a function of ration)
-98
 * Note: this distinguishes between emissions from crops used in the rations, and those sold
 TotalSoilN2O .. SumSoilN2O/298 =E=
 Sum((alf),SoilN2O(alf)*Ac(alf)) +
