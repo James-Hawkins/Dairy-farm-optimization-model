@@ -1,5 +1,3 @@
-# MSC_Thesis_Dairy_GHGs
-
 This code is a complete summary of the GAMS script used to run the optimization model described in the paper Hawkins et al. (2015)
 
 
